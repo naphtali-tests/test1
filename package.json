@@ -1,0 +1,8 @@
+{
+  "name": "example-project",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.16.4",
+    "lodash": "^4.17.11"
+  }
+}
