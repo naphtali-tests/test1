@@ -66,4 +66,8 @@ resource "azurerm_linux_virtual_machine" "example" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
+
+
+  # Define custom data for cloud-init configuration
+  custom_data = base64encode(templatefile("${path.module}/cloud_init.cfg", {}))
 }
