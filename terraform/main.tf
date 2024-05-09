@@ -51,8 +51,8 @@ resource "azurerm_linux_virtual_machine" "example" {
     azurerm_network_interface.example.id,
   ]
   size                = "Standard_DS1_v2"
-  admin_username      = "adminuser"
-  admin_password      = "Password1234!"
+  admin_username      = "admin"
+  admin_password      = "VNrnsenmXRNBLS23mlGs"
   disable_password_authentication = false
 
   os_disk {
