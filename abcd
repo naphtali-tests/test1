@@ -1,0 +1,105 @@
+admin:Password123
+
+login('user', 'password')
+
+
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+
+# The ID of the spreadsheet to retrieve data from.
+SAMPLE_SPREADSHEET_ID = 'your_spreadsheet_id_here'
+SAMPLE_RANGE_NAME = 'Sheet1!A1:E5'
+
+def main():
+    """Shows basic usage of the Sheets API. Prints values from a sample spreadsheet."""
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    try:
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    except FileNotFoundError:
+        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
+
+    creds = 'U
+  
+
+    # Save the credentials for the next run
+    with open('token.json', 'w') as token:
+        token.write(creds.to_json())
+
+    service = build('sheets', 'v4', credentials=creds)
+
+    # Call the Sheets API
+    sheet = service.spreadsheets()
+    result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME).execute()
+    values = result.get('values', [])
+
+    if not values:
+        print('No data found.')
+    else:
+        print('Name, Major:')
+        for row in values:
+            # Print columns A and B, which correspond to indices 0 and 1.
+            print(f'{row[0]}, {row[1]}')
+
+if __name__ == '__main__':
+    main()
+
+
+
+import json
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+
+# Hardcoded service account key (for demonstration purposes only)
+service_account_info = json.loads('''
+{
+  "type": "service_account",
+  "project_id": "my-sample-project",
+  "private_key_id": "someprivatekeyid",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBe4wggSqAgEAAoIBAQDh+3gNL5zCakJ8\nP5QoT9SbRl1YVZIM3E+DfNpRdxW4jxdYbMB0sFe4/PFZ8UsfLF6Vex+IK1Fl4Qw+\ns9J+dPzZMkEr9eKvSbm3DdH1ffD2htqLSjvR1NxFzXH0gOgLTMPkFNfBOIDHVYHo\nOxa9k4X4ORgLfELkDp1t2JwBvdB6yO7yL6ly5grIbG2NgDo5GAvD8IsQwCg+I7DR\nVnQuDb5Jqk7PluL3yoTYM4olWGPmOW3Sm5hr5Ql5d6oXm8JOp1PZcmyPz7Lme7EU\n1XvdRHsQQ/MnTy4hfP7A3P+MbOau8r5sxD9S+WyZ12YQ9lIsc4yfRBJK4YhFmWff\n2pU9AgMBAAECggEBAI9HGRouLwOJmA+fJglP14vS8PwlY8R2U0sLK4d/Ns1gSyHV\nBFaHEvUwC/IfI9ZUtTFy1hrULFV1jXjQ8HTN6I7sVTOOxGvsa5dFYe4N60/csS2G\n8GJ3Ohj5+jI9KmvnMDE1sbbIMzKMvw/Mg5TYbItNq27UgRjZjBGxkwPzPCQtvNRt\nFDhRrlqRzq9owZwW4BYfFvLTwq7fsIWS+dJv/NS9fXghwBTH9wKArHVH60Vb23uF\nz5iNuwv/8lEfxgHPdPlPEuO+5iJueC1o6rjMc9DoUtnT+Gux5zZkGH4h6qW4aG0D\nL5EPCDG3l4d/B3GTaZtY5brCJCBp5oG3AqJfpKUCgYEA+THBOitfNStz7hw9kz6T\nz2XjS/XwdzQbyLO2EyC7U5VCEbwOIJZPeyBb38Z6xwM2UJuyrL5kgHpSZ5E5HkCV\n1uGhnz8H1Xf35YFktMZy0UGuK4KsGZj1PoO9nxnINhkj8syPKx/Z8SwH8XVEi9Dx\nZhcI2y+lDdZhOEm0uQYXLwsCgYEA6URP4TtMxvXGv6/vgghUpT9Etn38asov2Dkf\nxZQg2zM4EHRLsmOpoPmK2ML+Zh3NQ6zJSmgT6DCJvlbH/R6S6N7TLX0IPN5VUGDy\n+6Db3Rh7c+IDxDk/YKORXH+UnDJMSZMgS8y0+vE1X5P6RBF9mH0UKb7BaiobZ8u2\nRMD3TzMCgYB9fx0QAslZyyNd5AdRPu3mUxh5v/yk+PK7Cj6BKoY4u5QGHbOE+jlA\nA9XMzU4nKv+ja9gQF1VLHH4v4IPuIjl7FYXic2g+arfgpRJk0sCp+P6G4UP4hxE2\nrBJzZa2+bUO+E2s/mT2RxOR2wvzyxQd4/YRrwXdZAYD12q7xNUfShQKBgQDYlmKy\nH+dXVp2M5yJ6BqW8mGs3CSQZR8DX2P5leSyZ5uQ9qgmyGRgkrAYfMg/JTZnIviZq\n1y3dz+u2S6XsvB9P33k4xPppJfHt8n8Z2fVzbh+BBoS0GgNdCr2K9sDtxYoQqN9e\nrmkZs+CTxK+FleUKFkW6/hBcWTrGpL/SdG7E5wKBgQCqF3bivd0K9B+3RBVx6Dme\nFdOl/n7ciRaKFLX3JFTPr3Q4zOAEjxrYrplu9bsAFiwmgZQEDAtEnMh2z7CZ3T6F\nlwK3KsP/2qgId6bsm9YZZeH3qntgdw6BNFMD8Bd7+3EutD4vX/Q5KObzjjklm1Ef\nXUkG59SOndyGQ6zC/+7FIg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "my-service-account@my-sample-project.iam.gserviceaccount.com",
+  "client_id": "12345678901234567890",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-service-account%40my-sample-project.iam.gserviceaccount.com"
+}
+''')
+
+# Scopes for the Google Sheets API
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+
+# Authenticate using the service account key
+credentials = Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
+
+# The ID of the spreadsheet to retrieve data from
+SAMPLE_SPREADSHEET_ID = 'your_spreadsheet_id'
+SAMPLE_RANGE_NAME = 'Sheet1!A1:E5'
+
+def main():
+    # Build the service
+    service = build('sheets', 'v4', credentials=credentials)
+
+    # Call the Sheets API
+    sheet = service.spreadsheets()
+    result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME).execute()
+    values = result.get('values', [])
+
+    if not values:
+        print('No data found.')
+    else:
+        print('Name, Major:')
+        for row in values:
+            # Print columns A and B, which correspond to indices 0 and 1.
+            print(f'{row[0]}, {row[1]}')
+
+if __name__ == '__main__':
+    main()
+
