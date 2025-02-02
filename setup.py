@@ -13,7 +13,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'requests==1.0',
-        'numpy==1.3',
+        'numpy==1.4',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
