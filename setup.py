@@ -12,8 +12,8 @@ setup(
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=[
-        'requests==1.0',
-        'numpy==1.3',
+        'requests==2.32.4',
+        'numpy==1.22.0',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
